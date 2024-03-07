@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Redirect;
 class LoginController extends Controller
 {
 
+    public function __construct(){
+        $this->middleware('admin')->only('logOut');
+    }
 
     public function loginPage(){
 
@@ -33,9 +36,17 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             return redirect()->intended(route('admin.dashboard'));
+        }else{
+            return redirect()->back()->with('error', 'Email Or password invalid!');
         }
 
+    }
 
+    public function logOut(){
+
+        Auth::logout();
+
+        return Redirect::route('admin.login');
 
     }
 

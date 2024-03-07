@@ -7,6 +7,11 @@
                 <div class="col-xl-6">
                     <div class="form-input-content">
                         <div class="card login-form mb-0">
+                            @if(session('error'))
+                                <div class="alert alert-danger text-center">
+                                    {!! session('error') !!}
+                                </div>
+                            @endif
                             <div class="card-body pt-5">
                                 <h4 class="text-center">SZamanTech</h4>
                                 <form action="{{ route('admin.login.action') }}" class="mt-5 mb-5 login-input" method="POST">

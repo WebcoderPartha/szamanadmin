@@ -3,9 +3,10 @@
         <a href="index.html">
             <b class="logo-abbr"><img src="{{ asset('backend/images/logo.png') }}" alt=""> </b>
             <span class="logo-compact"><img src="{{ asset('backend//images/logo-compact.png') }}" alt=""></span>
-            <span class="brand-title">
-                        <img src="{{ asset('backend/images/logo-text.png') }}" alt="">
-                    </span>
+            <dev class="brand-title">
+{{--                <img src="{{ asset('backend/images/logo-text.png') }}" alt="">--}}
+                <h2 class="text-white">SZamanTech</h2>
+            </dev>
         </a>
     </div>
 </div>
@@ -167,7 +168,7 @@
                                 <li>
                                     <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock Screen</span></a>
                                 </li>
-                                <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                <li><a href="{{ route('admin.logout')  }}"><i class="icon-key"></i> <span>Logout</span></a></li>
                             </ul>
                         </div>
                     </div>
