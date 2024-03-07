@@ -22,6 +22,11 @@ class DatabaseSeeder extends Seeder
         'role-delete',
     ];
 
+    private $roles = [
+        'superadmin',
+        'admin',
+        'user'
+    ];
 
 
     public function run(): void
@@ -31,25 +36,30 @@ class DatabaseSeeder extends Seeder
             Permission::create(['name' => $permission]);
         }
 
+
         $user = User::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@gmail.com',
             'password' => Hash::make('superadmin@gmail.com')
         ]);
 
-        $role = Role::create(['name' => 'Superadmin']);
-
         $permissions = Permission::pluck('id', 'id')->all();
 
-        $role->syncPermissions($permissions);
+        foreach ($this->roles as $role){
 
-        $user->assignRole([$role->id]);
+            if ($role === 'superadmin'){
 
-        // \App\Models\User::factory(10)->create();
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+                $role = Role::create(['name' => $role]);
+                $role->syncPermissions($permissions);
+                $user->assignRole([$role->id]);
+
+            }else{
+
+                $role = Role::create(['name' => $role]);
+            }
+
+
+        }
 
 
     }
