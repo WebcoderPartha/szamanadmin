@@ -1,12 +1,16 @@
 @extends('backend.layouts.app')
 @section('title', 'Productd')
 @section('content')
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success">
+                                <h4 class="font-weight-bold">{{ $message }}</h4>
+                            </div>
+                        @endif
                         <h4 class="card-title">Role List</h4>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered zero-configuration">
@@ -36,16 +40,13 @@
                                         </td>
                                         <td>
                                             <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
-
                                                 @can('role-edit')
                                                     <a class="btn btn-primary" href="{{ route('roles.edit', $role->id) }}">Edit</a>
                                                 @endcan
-
-
                                                 @csrf
                                                 @method('DELETE')
-                                                @can('product-delete')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                @can('role-delete')
+                                                    <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger">Delete</button>
                                                 @endcan
                                             </form>
                                         </td>

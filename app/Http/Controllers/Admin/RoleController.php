@@ -45,9 +45,12 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
             'permission' => 'required',
+
         ]);
 
         $role = Role::create(['name' => $request->input('name')]);
+
+        // If permission check box select
         if($request->permission){
             $permissions = Permission::whereIn('id', $request->permission)->get();
             $role->syncPermissions($permissions);
@@ -96,7 +99,10 @@ class RoleController extends Controller
         $role->name = $request->input('name');
         $role->save();
 
-        $role->syncPermissions($request->input('permission'));
+        if($request->permission){
+            $permissions = Permission::whereIn('id', $request->permission)->get();
+            $role->syncPermissions($permissions);
+        }
 
         return redirect()->route('roles.index')->with('success', 'Role updated successfully');
     }
@@ -107,7 +113,7 @@ class RoleController extends Controller
     public function destroy(string $id)
     {
         DB::table("roles")->where('id', $id)->delete();
-        return redirect()->route('roles.index')
-            ->with('success', 'Role deleted successfully');
+        return redirect()->route('roles.index')->with('success', 'Role deleted successfully');
     }
+
 }

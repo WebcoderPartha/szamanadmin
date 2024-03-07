@@ -22,6 +22,9 @@
                         <div class="basic-form">
                             <div class="form-group">
                                 <input type="text" class="form-control input-default" name="name" placeholder="Role name">
+                                @error('name')
+                                    <small class="text-red">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
                         <h4 class="card-title">Permissions</h4>
@@ -33,8 +36,13 @@
                                         <label class="form-check-label">
                                             <input type="checkbox" class="form-check-input" name="permission[]" value="{{ $permissionValue->id }}">{{ $permissionValue->name }}</label>
                                     </div>
+
                                 @endforeach
+                                @error('permission')<br>
+                                    <small class="text-red">{{ $message }}</small>
+                                @enderror
                             </div>
+
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-10">
