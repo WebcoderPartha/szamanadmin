@@ -23,6 +23,7 @@
                                     <th>Profession</th>
                                     <th>Nationality</th>
                                     <th>Status</th>
+                                    <th>Role</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                 </tr>
@@ -37,6 +38,13 @@
                                         <td> {{ $user->gender }} </td>
                                         <td> {{ $user->profession }} </td>
                                         <td> {{ $user->nationality }} </td>
+                                        <td>
+                                            @if(!empty($user->getRoleNames()))
+                                                @foreach($user->getRoleNames() as $role)
+                                                    <label class="badge badge-info">{{ $role }}</label>
+                                                @endforeach
+                                            @endif
+                                        </td>
                                         <th> @if($user->image !== null )
                                                 <img src="{{ asset($user->image) }}" width="80" alt="">
                                             @else
@@ -49,6 +57,7 @@
                                             @else
                                                 <span class="badge badge-danger px-2">Deactive</span>
                                             @endif
+
                                         </td>
                                         <td>
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST">

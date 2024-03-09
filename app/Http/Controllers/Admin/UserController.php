@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(5);
+        $users = User::latest()->paginate(10);
         return view('backend.user.index',compact('users'));
     }
 
@@ -40,13 +40,14 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:6',
             'gender' => 'required',
             'profession' => 'required',
             'status' => 'required',
             'nationality' => 'required',
             'remarks' => 'required',
 //            'image' => 'required|file',
+            'roles' => 'required'
         ]);
 
         // Image Update
@@ -69,6 +70,9 @@ class UserController extends Controller
                 'image' => $directory
             ]);
 
+            // Assigned Role from Spatie
+            $user->assignRole($request->input('roles'));
+
         }else{
 
             $user = User::create([
@@ -82,6 +86,8 @@ class UserController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
+            // Assigned Role from Spatie
+            $user->assignRole($request->input('roles'));
         }
 
         return redirect()->back()->with('success', 'User Created successfully');

@@ -98,7 +98,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-3">
                                             <div class="form-group">
                                                 <h6> <label for="status">Status</label></h6>
                                                 <select id="status" name="status" class="form-control">
@@ -107,6 +107,20 @@
                                                     <option value="0">Deactive</option>
                                                 </select>
                                                 @error('status')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <h6> <label for="roles">Role</label></h6>
+                                                <select id="roles" class="form-control" name="roles">
+                                                    <option value="">Choose role</option>
+                                                    @foreach ($roles as $role)
+                                                        <option value="{{ $role }}">{{ $role }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('roles')
                                                 <small class="text-red">{{ $message }}</small>
                                                 @enderror
                                             </div>
