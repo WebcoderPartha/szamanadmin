@@ -16,29 +16,47 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="#" class="step-form-horizontal" enctype="multipart/form-data">
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success">
+                                <h4 class="font-weight-bold">{{ $message }}</h4>
+                            </div>
+                        @endif
+                        <form action="{{ route('users.store') }}" method="POST" class="step-form-horizontal" enctype="multipart/form-data">
+                            @csrf
                             <div>
                                 <h4>Create User</h4>
                                 <section>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <input type="text" name="name" class="form-control" placeholder="Name" required>
+                                                <input type="text" name="name" class="form-control" placeholder="Name">
+                                                @error('name')
+                                                    <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                                <input type="email" name="email" class="form-control" placeholder="Email">
+                                                @error('email')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <input type="password" name=password" class="form-control" placeholder="Password" required>
+                                                <input type="password" name="password" class="form-control" placeholder="Password">
+                                                @error('password')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password" required>
+                                                <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password">
+                                                @error('password_confirmation')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -53,22 +71,30 @@
                                                 <label class="radio-inline mr-3">
                                                     <input type="radio" value="Female" name="gender">Female</label>
                                             </div>
+                                            @error('gender')
+                                            <small class="text-red">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                         <div class="col-lg-6">
                                             <h6 class="card-title">Profession</h6>
-                                            <div class="form-group">
+                                            <div class="form-group" id="professionCheckbox">
                                                 <div class="form-check form-check-inline">
-                                                    <label class="form-check-label">
-                                                        <input type="checkbox" name="profession" class="form-check-input" value="Engineer">Engineer</label>
+                                                    <label class="form-check-label" >
+                                                        <input type="checkbox" name="profession" class="form-check-input inputcheck"   value="Engineer">Engineer</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" name="profession" class="form-check-input" value="">Doctor</label>
+                                                        <input type="checkbox" name="profession" class="form-check-input inputcheck" value="Doctor">Doctor</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox"  name="profession" class="form-check-input" value="">Professor</label>
+                                                        <input type="checkbox"  name="profession" class="form-check-input inputcheck" value="Professor">Professor</label>
+
                                                 </div>
+
+                                                @error('profession')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
 
@@ -76,18 +102,24 @@
                                             <div class="form-group">
                                                 <h6> <label for="status">Status</label></h6>
                                                 <select id="status" name="status" class="form-control">
-                                                    <option selected="selected">Choose</option>
+                                                    <option value="">Choose status</option>
                                                     <option value="1">Active</option>
                                                     <option value="0">Deactive</option>
                                                 </select>
+                                                @error('status')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <h6> <label for="nationality">Nationality</label></h6>
                                                 <select id="nationality" name="nationality" class="form-control">
-                                                    <option selected="selected">Choose</option>
+                                                    <option value="">Choose nationality</option>
                                                 </select>
+                                                @error('nationality')
+                                                <small class="text-red">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -102,9 +134,16 @@
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <div class="form-group">
-                                                <h6> <label for="image">Image</label></h6>
-                                                <input id="image" class="form-control-file" type="file" name="image">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <h6> <label for="image">Image</label></h6>
+                                                        <input id="image" class="form-control-file" type="file" name="image">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <img src="" id="imagePreview" width="100" alt="">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -126,31 +165,16 @@
     <!-- #/ container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+
+
         $(document).ready(function () {
 
-            {{--$('#nationality').on('change', function () {--}}
-            {{--    var country = this.value;--}}
-            {{--    $("#state-dropdown").html('');--}}
-            {{--    $.ajax({--}}
-            {{--        url: "https://restcountries.com/v3.1/all",--}}
-            {{--        type: "GET",--}}
-            {{--        data: {--}}
-            {{--            country: country,--}}
-            {{--            _token: '{{csrf_token()}}'--}}
-            {{--        },--}}
-            {{--        dataType: 'json',--}}
-            {{--        success: function (result) {--}}
-            {{--            console.log(result[0])--}}
-            {{--            // $('#state-dropdown').html('<option value="">-- Select State --</option>');--}}
-            {{--            // $.each(result.states, function (key, value) {--}}
-            {{--            //     $("#state-dropdown").append('<option value="' + value--}}
-            {{--            //         .id + '">' + value.name + '</option>');--}}
-            {{--            // });--}}
-            {{--            // $('#city-dropdown').html('<option value="">-- Select City --</option>');--}}
-            {{--        }--}}
-            {{--    });--}}
-            {{--});--}}
+            // Profession CheckBox
+            $(".form-check-input").click(function(){
+                $(".form-check-input").not(this).prop("checked", false);
+            })
 
+            // Country Fetch From API
             $("#nationality").on("click", function(){
                 // event.preventDefault()
                 $.ajax({
@@ -170,7 +194,17 @@
                     }
                 })
                 $("#addSN").hide()
-            })
+            });
+
+            // Image Preview
+            $('#image').change(function(){
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    $('#imagePreview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
+
 
         })
     </script>

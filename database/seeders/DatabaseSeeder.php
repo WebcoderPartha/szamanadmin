@@ -40,7 +40,8 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@gmail.com',
-            'password' => Hash::make('superadmin@gmail.com')
+            'password' => Hash::make('superadmin@gmail.com'),
+            'status' => 1
         ]);
 
         $permissions = Permission::pluck('id', 'id')->all();

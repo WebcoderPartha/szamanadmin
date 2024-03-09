@@ -7,7 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -36,29 +38,63 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+//        return $request->all();
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed',
-            'roles' => 'required',
             'gender' => 'required',
             'profession' => 'required',
             'status' => 'required',
             'nationality' => 'required',
             'remarks' => 'required',
-            'image' => 'required|file',
-
-
+//            'image' => 'required|file',
         ]);
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
+        // Image Update
+        if ($request->file('image')){
+            $file = $request->file('image');
+            $image = 'profile-'.Str::slug($request->name,'-').'.'.$file->getClientOriginalExtension();
+            $directory = 'uploads/profile/'.$image;
+            Image::make($file)->resize('699', '600')->save($directory);
 
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'gender' => $request->gender,
+                'profession' => $request->profession,
+                'status' => $request->status,
+                'nationality' => $request->nationality,
+                'remarks' => $request->remarks,
+                'image' => $directory
+            ]);
 
-        return redirect()->route('users.index')
-            ->with('success','User created successfully');
+        }else{
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'gender' => $request->gender,
+                'profession' => $request->profession,
+                'status' => $request->status,
+                'nationality' => $request->nationality,
+                'remarks' => $request->remarks,
+            ]);
+
+        }
+
+
+        return redirect()->back()->with('success', 'User Created successfully');
+//        $input = $request->all();
+//        $input['password'] = Hash::make($input['password']);
+//
+//        $user = User::create($input);
+//        $user->assignRole($request->input('roles'));
+//
+//        return redirect()->route('users.index')
+//            ->with('success','User created successfully');
     }
 
     /**
