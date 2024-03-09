@@ -22,8 +22,8 @@
                                     <th>Gender</th>
                                     <th>Profession</th>
                                     <th>Nationality</th>
-                                    <th>Status</th>
                                     <th>Role</th>
+                                    <th>Status</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                 </tr>
@@ -45,12 +45,7 @@
                                                 @endforeach
                                             @endif
                                         </td>
-                                        <th> @if($user->image !== null )
-                                                <img src="{{ asset($user->image) }}" width="80" alt="">
-                                            @else
-                                                <img src="{{ asset('uploads/profile/profile.jpg') }}" width="80" alt="">
-                                            @endif
-                                        </th>
+
                                         <td>
                                             @if($user->status == 1)
                                                 <span class="badge badge-success px-2">Active</span>
@@ -59,6 +54,12 @@
                                             @endif
 
                                         </td>
+                                        <th> @if($user->image !== null )
+                                                <img src="{{ asset($user->image) }}" width="80" alt="">
+                                            @else
+                                                <img src="{{ asset('uploads/profile/profile.jpg') }}" width="80" alt="">
+                                            @endif
+                                        </th>
                                         <td>
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                                                 @can('role-edit')

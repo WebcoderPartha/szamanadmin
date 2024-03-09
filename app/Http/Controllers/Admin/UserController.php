@@ -61,7 +61,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'gender' => $request->gender,
                 'profession' => $request->profession,
                 'status' => $request->status,
@@ -78,7 +78,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'gender' => $request->gender,
                 'profession' => $request->profession,
                 'status' => $request->status,
@@ -90,7 +90,7 @@ class UserController extends Controller
             $user->assignRole($request->input('roles'));
         }
 
-        return redirect()->back()->with('success', 'User Created successfully');
+        return redirect()->route('users.index')->with('success', 'User Created successfully');
 
     }
 
@@ -108,40 +108,132 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user = User::find($user);
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
 
-        return view('backend.user.edit',compact('user','roles','userRole'));
+        $roles = Role::get();
+        return view('backend.user.edit',compact('user','roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
+
+
+        $user = User::find($id);
+
+
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user,
-            'password' => 'same:confirm-password',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+//            'password' => 'required|confirmed|min:6',
+            'gender' => 'required',
+            'profession' => 'required',
+            'status' => 'required',
+            'remarks' => 'required',
             'roles' => 'required'
         ]);
 
-        $input = $request->all();
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']);
+        // Image Update
+        if ($request->file('image')){
+
+            $file = $request->file('image');
+            $image = 'profile-'.Str::slug($request->name,'-').'.'.$file->getClientOriginalExtension();
+            $directory = 'uploads/profile/'.$image;
+            Image::make($file)->resize('600', '600')->save($directory);
+
+            // If Image request
+            if ($user->image !== NULL){
+
+                // If file exist
+                if (file_exists(public_path($user->image))){
+
+                    // Remove Image from Folder
+                    unlink(public_path($user->image));
+
+                    $update = User::findOrFail($id);
+                    $update->update([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'password' => Hash::make($request->password),
+                        'gender' => $request->gender,
+                        'profession' => $request->profession,
+                        'status' => $request->status,
+                        'nationality' => $request->nationality,
+                        'remarks' => $request->remarks,
+                        'image' => $directory
+                    ]);
+
+//                    DB::table('model_has_roles')->where('model_id',$user->id)->delete();
+                    // Assigned Role from Spatie
+                    $update->assignRole($request->input('roles'));
+
+
+                }else{
+
+                    $update= User::findOrFail($id);
+                    $update->update([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'password' => Hash::make($request->password),
+                        'gender' => $request->gender,
+                        'profession' => $request->profession,
+                        'status' => $request->status,
+                        'nationality' => $request->nationality,
+                        'remarks' => $request->remarks,
+                        'image' => $directory
+                    ]);
+
+                    $update->assignRole($request->input('roles'));
+                }
+
+
+            }else{
+
+
+                $update = User::find($id);
+
+                $update->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'gender' => $request->gender,
+                    'profession' => $request->profession,
+                    'status' => $request->status,
+                    'nationality' => $request->nationality,
+                    'remarks' => $request->remarks,
+                    'image' => $directory
+                ]);
+
+                $update->assignRole($request->input('roles'));
+
+            }
+
+
+
         }else{
-            $input = Arr::except($input,array('password'));
+
+
+            $update = User::find($id);
+            $update->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'gender' => $request->gender,
+                'profession' => $request->profession,
+                'status' => $request->status,
+                'nationality' => $request->nationality,
+                'remarks' => $request->remarks,
+            ]);
+            $update->assignRole($request->input('roles'));
+
+
+//            // Assigned Role from Spatie
+//            $update->assignRole($request->input('roles'));
         }
 
-        $user = User::find($user);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$user)->delete();
 
-        $user->assignRole($request->input('roles'));
-
-        return redirect()->route('users.index')
-            ->with('success','User updated successfully');
+        return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
 
     /**
@@ -158,18 +250,18 @@ class UserController extends Controller
                 unlink(public_path($user->image));
                 $user->delete();
 
-                return redirect()->route('users.index')->with('success','User updated successfully');
+                return redirect()->route('users.index')->with('success','User deleted successfully');
 
             }else{
 
                 $user->delete();
-                return redirect()->route('users.index')->with('success','User updated successfully');
+                return redirect()->route('users.index')->with('success','User deleted successfully');
             }
 
         }else{
 
             $user->delete();
-            return redirect()->route('users.index')->with('success','User updated successfully');
+            return redirect()->route('users.index')->with('success','User deleted successfully');
         }
 
     }

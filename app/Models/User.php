@@ -29,7 +29,10 @@ class User extends Authenticatable
         'remarks',
         'image',
     ];
-
+    public function guardName()
+    {
+        return 'web';
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
