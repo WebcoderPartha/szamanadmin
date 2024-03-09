@@ -17,8 +17,8 @@
                     <i class="icon-people menu-icon"></i><span class="nav-text">Users</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="#">Add User</a></li>
-                    <li><a href="#">All User</a></li>
+                    <li><a href="{{ route('users.create') }}">Add User</a></li>
+                    <li><a href="{{ route('users.index') }}">All User</a></li>
                 </ul>
             </li>
             <li>
@@ -30,7 +30,6 @@
                     <li><a href="{{ route('roles.index') }}">All Role</a></li>
                 </ul>
             </li>
-
         </ul>
     </div>
 </div>

@@ -26,7 +26,7 @@
                                 @foreach ($roles as $key => $role)
                                     @php
                                         $rolePermissions = \Spatie\Permission\Models\Permission::join("role_has_permissions", "role_has_permissions.permission_id", "=", "permissions.id")->where("role_has_permissions.role_id", $role->id)->get();
-                                        $badgeColor = ['primary', 'danger', 'info', 'success', 'warning', 'secondary']
+                                        $badgeColor = ['primary', 'info', 'success', 'danger', 'warning']
                                     @endphp
                                     <tr>
                                         <td>{{ $key+1 }}</td>
