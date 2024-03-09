@@ -1,44 +1,78 @@
 @extends('backend.layouts.app')
-@section('title', 'Create')
+@section('title', 'User List')
 @section('content')
-    <div class="row page-titles mx-0">
-        <div class="col p-md-0">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">User List</a></li>
-            </ol>
-        </div>
-    </div>
-    <!-- row -->
-
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
-                <form method="POST" action="{{route('roles.store')}}">
-                    @csrf
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Add User</h4>
-                            <div class="basic-form">
-                                <div class="form-group">
-                                    <input type="text" class="form-control input-default" name="name" placeholder="Role name">
-                                    @error('name')
-                                    <small class="text-red">{{ $message }}</small>
-                                    @enderror
-                                </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success">
+                                <h4 class="font-weight-bold">{{ $message }}</h4>
                             </div>
+                        @endif
+                        <h4 class="card-title">User List</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered zero-configuration">
+                                <thead>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Profession</th>
+                                    <th>Nationality</th>
+                                    <th>Status</th>
+                                    <th>Image</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($users as $key => $user)
 
-                            <div class="form-group row">
-                                <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-dark">Save</button>
-                                </div>
-                            </div>
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td> {{ $user->email }} </td>
+                                        <td> {{ $user->gender }} </td>
+                                        <td> {{ $user->profession }} </td>
+                                        <td> {{ $user->nationality }} </td>
+                                        <th> @if($user->image !== null )
+                                                <img src="{{ asset($user->image) }}" width="80" alt="">
+                                            @else
+                                                <img src="{{ asset('uploads/profile/profile.jpg') }}" width="80" alt="">
+                                            @endif
+                                        </th>
+                                        <td>
+                                            @if($user->status == 1)
+                                                <span class="badge badge-success px-2">Active</span>
+                                            @else
+                                                <span class="badge badge-danger px-2">Deactive</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                                @can('role-edit')
+                                                    <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}">Edit</a>
+                                                @endcan
+                                                @csrf
+                                                @method('DELETE')
+                                                @can('role-delete')
+                                                    <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger">Delete</button>
+                                                @endcan
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                @endforeach
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-                </form>
+                </div>
             </div>
         </div>
     </div>
-    <!-- #/ container -->
+
 @endsection

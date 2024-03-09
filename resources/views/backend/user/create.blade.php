@@ -67,9 +67,9 @@
                                             <h6>Gender</h6>
                                             <div class="form-group">
                                                 <label class="radio-inline mr-3">
-                                                    <input type="radio" name="gender" value="Male">Male</label>
+                                                    <input type="radio" name="gender" value="Male"> Male</label>
                                                 <label class="radio-inline mr-3">
-                                                    <input type="radio" value="Female" name="gender">Female</label>
+                                                    <input type="radio" value="Female" name="gender"> Female</label>
                                             </div>
                                             @error('gender')
                                             <small class="text-red">{{ $message }}</small>

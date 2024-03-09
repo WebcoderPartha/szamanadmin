@@ -16,15 +16,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
 
-
-
     /**
      * Show the form for creating a new resource.
      */
     public function index()
     {
-        $data = User::latest()->paginate(5);
-        return view('backend.user.index',compact('data'));
+        $users = User::latest()->paginate(5);
+        return view('backend.user.index',compact('users'));
     }
 
     public function create()
@@ -53,10 +51,11 @@ class UserController extends Controller
 
         // Image Update
         if ($request->file('image')){
+
             $file = $request->file('image');
             $image = 'profile-'.Str::slug($request->name,'-').'.'.$file->getClientOriginalExtension();
             $directory = 'uploads/profile/'.$image;
-            Image::make($file)->resize('699', '600')->save($directory);
+            Image::make($file)->resize('600', '600')->save($directory);
 
             $user = User::create([
                 'name' => $request->name,
@@ -85,16 +84,8 @@ class UserController extends Controller
 
         }
 
-
         return redirect()->back()->with('success', 'User Created successfully');
-//        $input = $request->all();
-//        $input['password'] = Hash::make($input['password']);
-//
-//        $user = User::create($input);
-//        $user->assignRole($request->input('roles'));
-//
-//        return redirect()->route('users.index')
-//            ->with('success','User created successfully');
+
     }
 
     /**
@@ -152,8 +143,28 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        User::find($user)->delete();
-        return redirect()->route('users.index')
-            ->with('success','User deleted successfully');
+
+        // If user image null
+        if (!$user->image == NULL){
+            // If file exist
+            if (file_exists(public_path($user->image))){
+                // Remove image from folder
+                unlink(public_path($user->image));
+                $user->delete();
+
+                return redirect()->route('users.index')->with('success','User updated successfully');
+
+            }else{
+
+                $user->delete();
+                return redirect()->route('users.index')->with('success','User updated successfully');
+            }
+
+        }else{
+
+            $user->delete();
+            return redirect()->route('users.index')->with('success','User updated successfully');
+        }
+
     }
 }
