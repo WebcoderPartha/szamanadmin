@@ -114,12 +114,48 @@
                 ]
             });
 
+
+
+            // Edit User Button
+            $('#userTable').on('click','.editUser',function(){
+                let id = $(this).data('id');
+                window.location.href = "users/"+id+"/edit";
+            })
+
+
+
+            // Delete record
+            let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $('#userTable').on('click','.deleteUser',function() {
+                let id = $(this).data('id');
+
+                var deleteConfirm = confirm("Are you sure?");
+                if (deleteConfirm === true) {
+                    // AJAX request
+                    $.ajax({
+                        url: "{{ route('admin.user.del') }}",
+                        type: 'post',
+                        data: {_token: CSRF_TOKEN, id: id},
+                        success: function (response) {
+                            if (response.success == 1) {
+                                alert("Record deleted.");
+
+                                // Reload DataTable
+                                table.ajax.reload();
+                            } else {
+                                alert("Invalid ID.");
+                            }
+                        }
+                    });
+                }
+            })
+
+
+
         });
 
-        $('#userTable').on('click','.editUser',function(){
-            let id = $(this).data('id');
-            window.location.href = "users/"+id+"/edit";
-        })
+
 
     </script>
 

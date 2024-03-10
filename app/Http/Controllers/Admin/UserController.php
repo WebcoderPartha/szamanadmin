@@ -276,6 +276,41 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    public function delete(Request $request)
+    {
+        $user = User::find($request->id);
+        // If user image null
+        if (!$user->image == NULL){
+            // If file exist
+            if (file_exists(public_path($user->image))){
+                // Remove image from folder
+                unlink(public_path($user->image));
+                $user->delete();
+
+                return  response()->json([
+                    'success' => 1
+                ]);
+
+            }else{
+
+                $user->delete();
+                return  response()->json([
+                    'success' => 1
+                ]);
+            }
+
+        }else{
+
+            $user->delete();
+            return  response()->json([
+                'success' => 1
+            ]);
+        }
+
+    }
+
+
     public function destroy(User $user)
     {
 
@@ -302,4 +337,6 @@ class UserController extends Controller
         }
 
     }
+
+
 }

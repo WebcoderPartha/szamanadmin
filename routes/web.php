@@ -26,6 +26,8 @@ Route::prefix('admin')->middleware('admin')->group(function (){
     Route::resource('roles', RoleController::class);
     // User Route
     Route::resource('users', UserController::class);
+    // User Delete
+    Route::post('/user/del', [UserController::class, 'delete'])->name('admin.user.del');
 
     Route::get('blog', [BlogController::class, 'index'])->name('blogs.index');
 

@@ -183,14 +183,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
-
         $(document).ready(function () {
 
             // Profession CheckBox
             $(".form-check-input").click(function(){
                 $(".form-check-input").not(this).prop("checked", false);
             })
-
             // Country Fetch From API
             $("#nationality").on("click", function(){
                 // event.preventDefault()
@@ -202,7 +200,6 @@
                         if(response.length > 0) {
                             response.forEach(el => {
                                 $("#nationality").append(`<option value='${el.name.common}'> ${el.name.common}</option>`)
-
                             })
                         }
                     },
@@ -221,7 +218,6 @@
                 }
                 reader.readAsDataURL(this.files[0]);
             });
-
 
         })
     </script>
