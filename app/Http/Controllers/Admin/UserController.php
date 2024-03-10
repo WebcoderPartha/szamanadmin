@@ -37,6 +37,12 @@ class UserController extends Controller
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm editUser" data-id="'.$row->id.'">Edit</a> <a href="javascript:void(0)" data-id="'.$row->id.'" class="delete btn deleteUser btn-danger btn-sm">Delete</a>';
                     return $actionBtn;
+                })->addColumn('role', function ($row){
+                    if(!empty($row->getRoleNames())){
+                        foreach ($row->getRoleNames() as $role){
+                            return '<label class="badge badge-info">'.$role.'</label>';
+                        }
+                    }
                 })
                 ->addColumn('image', function($row){
                     if ($row->image !== null){
@@ -47,7 +53,7 @@ class UserController extends Controller
                         return $image;
                     }
                 })
-                ->rawColumns(['status','action','image'])
+                ->rawColumns(['status','action','image', 'role'])
                 ->make(true);
         }
 //        $users = User::latest()->paginate(10);

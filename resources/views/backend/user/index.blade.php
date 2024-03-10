@@ -27,6 +27,7 @@
                                     <th>Gender</th>
                                     <th>Profession</th>
                                     <th>Nationality</th>
+                                    <th>Role</th>
                                     <th>Status</th>
                                     <th>Image</th>
                                     <th>Action</th>
@@ -108,6 +109,7 @@
                     {data: 'gender', name: 'gender'},
                     {data: 'profession', name: 'profession'},
                     {data: 'nationality', name: 'nationality'},
+                    {data: 'role', name: 'role'},
                     {data: 'status', name: 'status'},
                     {data: 'image', name: 'image'},
                     {data: 'action', name: 'action', orderable: true, searchable: true},
@@ -115,14 +117,11 @@
             });
 
 
-
             // Edit User Button
             $('#userTable').on('click','.editUser',function(){
                 let id = $(this).data('id');
                 window.location.href = "users/"+id+"/edit";
             })
-
-
 
             // Delete record
             let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -151,11 +150,7 @@
                 }
             })
 
-
-
         });
-
-
 
     </script>
 
