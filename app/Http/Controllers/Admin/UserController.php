@@ -35,7 +35,7 @@ class UserController extends Controller
                     }
                 })
                 ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm editUser" data-id="'.$row->id.'">Edit</a> <a href="javascript:void(0)" data-id="'.$row->id.'" class="delete btn deleteUser btn-danger btn-sm">Delete</a>';
                     return $actionBtn;
                 })
                 ->addColumn('image', function($row){
@@ -46,7 +46,6 @@ class UserController extends Controller
                         $image =  '<img src="'.asset('uploads/profile/profile.jpg').'" width="60" alt="">';
                         return $image;
                     }
-
                 })
                 ->rawColumns(['status','action','image'])
                 ->make(true);

@@ -168,7 +168,7 @@
                                 <section>
                                     <div class="row h-100">
                                         <div class="col-12 h-100 d-flex flex-column justify-content-center align-items-center">
-                                            <input type="submit" class="btn btn-primary" value="Add User">
+                                            <input type="submit" class="btn btn-primary" value="Update User">
                                         </div>
                                     </div>
                                 </section>

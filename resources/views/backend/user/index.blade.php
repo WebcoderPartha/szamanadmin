@@ -18,7 +18,7 @@
                         @endif
                         <h4 class="card-title">User List</h4>
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered zero-configuration  data-table">
+                            <table id="userTable" class="table table-striped table-bordered zero-configuration  data-table">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -115,6 +115,12 @@
             });
 
         });
+
+        $('#userTable').on('click','.editUser',function(){
+            let id = $(this).data('id');
+            window.location.href = "users/"+id+"/edit";
+        })
+
     </script>
 
 @endsection

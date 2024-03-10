@@ -1,6 +1,6 @@
 <div class="nav-header">
     <div class="brand-logo">
-        <a href="index.html">
+        <a href="{{ route('admin.dashboard') }}">
             <b class="logo-abbr"><img src="{{ asset('backend/images/logo.png') }}" alt=""> </b>
             <span class="logo-compact"><img src="{{ asset('backend//images/logo-compact.png') }}" alt=""></span>
             <dev class="brand-title">
