@@ -21,7 +21,7 @@
                                 <h4 class="font-weight-bold">{{ $message }}</h4>
                             </div>
                         @endif
-                        <form action="{{ route('users.store') }}" method="POST" class="step-form-horizontal" enctype="multipart/form-data">
+                        <form id="userCreatForm" action="{{ route('users.store') }}" method="POST" class="step-form-horizontal" enctype="multipart/form-data">
                             @csrf
                             <div>
                                 <h4>Create User</h4>
@@ -179,6 +179,7 @@
     <!-- #/ container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+
 
 
         $(document).ready(function () {

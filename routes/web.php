@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BlogController;
 
 // Authentication
 Route::get('/', [LoginController::class, 'loginPage'])->name('admin.login');
@@ -25,6 +26,8 @@ Route::prefix('admin')->middleware('admin')->group(function (){
     Route::resource('roles', RoleController::class);
     // User Route
     Route::resource('users', UserController::class);
+
+    Route::get('blog', [BlogController::class, 'index'])->name('blogs.index');
 
 });
 

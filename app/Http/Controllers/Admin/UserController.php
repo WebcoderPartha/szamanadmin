@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Intervention\Image\Facades\Image;
+use Yajra\DataTables\Facades\Datatables;
 
 class UserController extends Controller
 {
@@ -19,10 +20,40 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()->paginate(10);
-        return view('backend.user.index',compact('users'));
+        if ($request->ajax()) {
+            $data = User::select('*');
+            return Datatables::of($data)
+                ->addColumn('status', function($row){
+                    if ($row->status == '1') {
+                        $status = '<span class="badge badge-success px-2">Active</span>';
+                        return $status;
+                    }else{
+                        $status = '<span class="badge badge-danger px-2">Inactive</span>';
+                        return $status;
+                    }
+                })
+                ->addColumn('action', function($row){
+                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
+                ->addColumn('image', function($row){
+                    if ($row->image !== null){
+                        $image =  '<img src="'.asset($row->image).'" width="60" alt="">';
+                        return $image;
+                    }else{
+                        $image =  '<img src="'.asset('uploads/profile/profile.jpg').'" width="60" alt="">';
+                        return $image;
+                    }
+
+                })
+                ->rawColumns(['status','action','image'])
+                ->make(true);
+        }
+//        $users = User::latest()->paginate(10);
+        return view('backend.user.index');
+
     }
 
     public function create()
@@ -164,7 +195,8 @@ class UserController extends Controller
                         'image' => $directory
                     ]);
 
-//                    DB::table('model_has_roles')->where('model_id',$user->id)->delete();
+                    // Delete previous user role
+                    DB::table('model_has_roles')->where('model_id',$user->id)->delete();
                     // Assigned Role from Spatie
                     $update->assignRole($request->input('roles'));
 
@@ -183,6 +215,8 @@ class UserController extends Controller
                         'remarks' => $request->remarks,
                         'image' => $directory
                     ]);
+                    // Delete previous user role
+                    DB::table('model_has_roles')->where('model_id',$user->id)->delete();
 
                     $update->assignRole($request->input('roles'));
                 }
@@ -204,7 +238,8 @@ class UserController extends Controller
                     'remarks' => $request->remarks,
                     'image' => $directory
                 ]);
-
+                // Delete previous user role
+                DB::table('model_has_roles')->where('model_id',$user->id)->delete();
                 $update->assignRole($request->input('roles'));
 
             }
@@ -225,6 +260,9 @@ class UserController extends Controller
                 'nationality' => $request->nationality,
                 'remarks' => $request->remarks,
             ]);
+
+            // Delete previous user role
+            DB::table('model_has_roles')->where('model_id',$user->id)->delete();
             $update->assignRole($request->input('roles'));
 
 

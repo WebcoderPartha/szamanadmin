@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('backend/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css') }}">
     <!-- Custom Stylesheet -->
     <link href="{{ asset('backend/css/style.css') }}" rel="stylesheet">
+    @yield('header')
 
 </head>
 
@@ -121,6 +122,8 @@
 
 
 <script src="{{ asset('backend/js/dashboard/dashboard-1.js') }}"></script>
+
+@yield('footer')
 
 </body>
 
