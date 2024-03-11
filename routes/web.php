@@ -38,7 +38,7 @@ Route::prefix('admin')->middleware('admin')->group(function (){
     Route::get('/permissions/create', [PermissionController::class, 'create'])->name('admin.permission.create');
     Route::post('/permissions/store', [PermissionController::class, 'store'])->name('admin.permission.store');
     Route::get('/permissions/{id}/edit', [PermissionController::class, 'edit'])->name('admin.permission.edit');
-    Route::post('/permissions/{id}/edit', [PermissionController::class, 'update'])->name('admin.permission.update');
+    Route::put('/permissions/{id}/edit', [PermissionController::class, 'update'])->name('admin.permission.update');
     Route::post('/permissions/delete', [PermissionController::class, 'delete'])->name('admin.permission.delete');
 
 });

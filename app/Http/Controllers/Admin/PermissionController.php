@@ -68,7 +68,7 @@ class PermissionController extends Controller
     public function update(Request $request, $id){
 
         Permission::findById($id)->update([
-            'name' => $request->name
+            'name' => Str::of($request->name)->lower()->slug('-')
         ]);
         return redirect()->route('admin.permission.index')->with('success', 'Permission updated successfully');
     }
