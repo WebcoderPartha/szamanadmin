@@ -35,7 +35,7 @@ class UserController extends Controller
                     }
                 })
                 ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm editUser" data-id="'.$row->id.'">Edit</a> <a href="javascript:void(0)" data-id="'.$row->id.'" class="delete btn deleteUser btn-danger btn-sm">Delete</a>';
+                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm editUser" data-id="'.$row->id.'">Edit</a> <a href="javascript:void(0)" data-id="'.$row->id.'" class="delete btn deleteUser btn-danger btn-sm">Delete</a> <a href="javascript:void(0)" class="edit btn btn-primary btn-sm userView" data-id="'.$row->id.'">View</a>';
                     return $actionBtn;
                 })->addColumn('role', function ($row){
                     if(!empty($row->getRoleNames())){
@@ -43,8 +43,7 @@ class UserController extends Controller
                             return '<label class="badge badge-info">'.$role.'</label>';
                         }
                     }
-                })
-                ->addColumn('image', function($row){
+                })->addColumn('image', function($row){
                     if ($row->image !== null){
                         $image =  '<img src="'.asset($row->image).'" width="60" alt="">';
                         return $image;
@@ -81,7 +80,6 @@ class UserController extends Controller
             'profession' => 'required',
             'status' => 'required',
             'nationality' => 'required',
-            'remarks' => 'required',
 //            'image' => 'required|file',
             'roles' => 'required'
         ]);
@@ -166,7 +164,7 @@ class UserController extends Controller
             'gender' => 'required',
             'profession' => 'required',
             'status' => 'required',
-            'remarks' => 'required',
+//            'remarks' => 'required',
             'roles' => 'required'
         ]);
 
@@ -343,6 +341,35 @@ class UserController extends Controller
         }
 
     }
+
+    public function dropFile(){
+
+        return view('backend.user.drop');
+    }
+
+//    public function UploadStore(Request $request)
+//    {
+//        foreach($request->input('document', []) as $file) {
+//            //your file to be uploaded
+//            return $file;
+//        }
+//    }
+
+//    public function uploads(Request $request)
+//    {
+//        $path = storage_path('tmp/uploads');
+//
+////        !file_exists($path)) && mkdir($path, 0777, true);
+//
+//        $file = $request->file('file');
+//        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+//        $file->move($path, $name);
+//
+//        return response()->json([
+//            'name'          => $name,
+//            'original_name' => $file->getClientOriginalName(),
+//        ]);
+//    }
 
 
 }

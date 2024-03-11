@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title', 'Create')
+@section('title', Auth::user()->name.' | Edit Profile')
 @section('content')
     <div class="row page-titles mx-0">
         <div class="col p-md-0">
@@ -21,10 +21,11 @@
                                 <h4 class="font-weight-bold">{{ $message }}</h4>
                             </div>
                         @endif
-                        <form id="userCreatForm" action="{{ route('users.store') }}" method="POST" class="step-form-horizontal" enctype="multipart/form-data">
+                        <form id="userCreatForm" action="{{ route('admin.profile.update') }}" method="POST" class="step-form-horizontal" enctype="multipart/form-data">
+                            @method('PUT')
                             @csrf
                             <div>
-                                <h4>Profile</h4>
+                                <h4>Profile Update</h4>
                                 <section>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -51,9 +52,9 @@
                                             <h6>Gender</h6>
                                             <div class="form-group">
                                                 <label class="radio-inline mr-3">
-                                                    <input type="radio" name="gender" value="Male"> Male</label>
+                                                    <input type="radio" name="gender" @if(Auth::user()->gender === 'Male') checked @endif value="Male"> Male</label>
                                                 <label class="radio-inline mr-3">
-                                                    <input type="radio" value="Female" name="gender"> Female</label>
+                                                    <input type="radio" value="Female" @if(Auth::user()->gender === 'Female') checked @endif name="gender"> Female</label>
                                             </div>
                                             @error('gender')
                                             <small class="text-red">{{ $message }}</small>
@@ -64,15 +65,15 @@
                                             <div class="form-group" id="professionCheckbox">
                                                 <div class="form-check form-check-inline">
                                                     <label class="form-check-label" >
-                                                        <input type="checkbox" name="profession" class="form-check-input inputcheck"   value="Engineer">Engineer</label>
+                                                        <input type="checkbox" name="profession" @if(Auth::user()->profession === 'Engineer') checked @endif class="form-check-input inputcheck" value="Engineer">Engineer</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" name="profession" class="form-check-input inputcheck" value="Doctor">Doctor</label>
+                                                        <input type="checkbox" name="profession" @if(Auth::user()->profession === 'Doctor') checked @endif class="form-check-input inputcheck" value="Doctor">Doctor</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox"  name="profession" class="form-check-input inputcheck" value="Professor">Professor</label>
+                                                        <input type="checkbox" @if(Auth::user()->profession === 'Professor') checked @endif name="profession" class="form-check-input inputcheck" value="Professor">Professor</label>
 
                                                 </div>
 
@@ -81,41 +82,11 @@
                                                 @enderror
                                             </div>
                                         </div>
-
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <h6> <label for="status">Status</label></h6>
-                                                <select id="status" name="status" class="form-control">
-                                                    <option value="">Choose status</option>
-                                                    <option value="1" @if(Auth::user()->status === '1') selected @endif>Active</option>
-                                                    <option value="0" @if(Auth::user()->status === '0') selected @endif>Deactive</option>
-                                                </select>
-                                                @error('status')
-                                                <small class="text-red">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <h6> <label for="roles">Role</label></h6>
-                                                <select id="roles" class="form-control" name="roles">
-                                                    <option value="">Choose role</option>
-                                                    @foreach ($roles as $role)
-                                                        <option value="{{ $role }}" >{{ $role }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('roles')
-                                                <small class="text-red">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </section>
 
                                 <section>
                                     <div class="row">
-
                                         <div class="col-6">
                                             <div class="row">
                                                 <div class="col-6">
@@ -125,7 +96,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <img src="" id="imagePreview" width="100" alt="">
+                                                    <img src="{{ asset(Auth::user()->image) }}" id="imagePreview" width="100" alt="">
                                                 </div>
                                             </div>
                                         </div>

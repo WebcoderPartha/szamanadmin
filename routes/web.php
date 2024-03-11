@@ -5,8 +5,8 @@ use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProfileController;
 
 // Authentication
 Route::get('/', [LoginController::class, 'loginPage'])->name('admin.login');
@@ -30,16 +30,20 @@ Route::prefix('admin')->middleware('admin')->group(function (){
     // User Delete
     Route::post('/user/del', [UserController::class, 'delete'])->name('admin.user.del');
 
-    // Profile Edit
-    Route::get('/profile', [ProfileController::class, 'Profile'])->name('admin.profile');
+    // Profile Routes
+    Route::get('/profile',[ProfileController::class, 'profileDetails'])->name('admin.profile');
+    Route::get('/profile/edit',[ProfileController::class, 'profileEdit'])->name('admin.profile.edit');
+    Route::put('/profile/edit', [ProfileController::class, 'updateProfile'])->name('admin.profile.update');
+    // Profile Routes
 
-    // Permission
+    // Permission Routes
     Route::get('/permissions', [PermissionController::class, 'index'])->name('admin.permission.index');
     Route::get('/permissions/create', [PermissionController::class, 'create'])->name('admin.permission.create');
     Route::post('/permissions/store', [PermissionController::class, 'store'])->name('admin.permission.store');
     Route::get('/permissions/{id}/edit', [PermissionController::class, 'edit'])->name('admin.permission.edit');
     Route::put('/permissions/{id}/edit', [PermissionController::class, 'update'])->name('admin.permission.update');
     Route::post('/permissions/delete', [PermissionController::class, 'delete'])->name('admin.permission.delete');
+    // Permission Routes
 
 });
 

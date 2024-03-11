@@ -70,19 +70,17 @@
                 ]
             });
 
-
             // Edit User Button
             $('#userTable').on('click','.editUser',function(){
                 let id = $(this).data('id');
                 window.location.href = "users/"+id+"/edit";
-            })
+            });
 
             // Delete record
             let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
             $('#userTable').on('click','.deleteUser',function() {
                 let id = $(this).data('id');
-
                 var deleteConfirm = confirm("Are you sure?");
                 if (deleteConfirm === true) {
                     // AJAX request
@@ -102,7 +100,13 @@
                         }
                     });
                 }
-            })
+            });
+
+            // Edit User Button
+            $('#userTable').on('click','.userView',function(){
+                let id = $(this).data('id');
+                window.location.href = "users/"+id;
+            });
 
         });
 
