@@ -54,8 +54,31 @@ class PermissionController extends Controller
             ]);
         }
 
-        return redirect()->back();
+        return redirect()->route('admin.permission.index')->with('success', 'Permission updated successfully');
 
+    }
+
+    public function edit($id){
+
+        $permission = Permission::findById($id);
+        return view('backend.permission.edit', compact('permission'));
+
+    }
+
+    public function update(Request $request, $id){
+
+        Permission::findById($id)->update([
+            'name' => $request->name
+        ]);
+        return redirect()->route('admin.permission.index')->with('success', 'Permission updated successfully');
+    }
+
+
+    public function delete(Request $request){
+        Permission::findById($request->id)->delete();
+        return  response()->json([
+            'success' => 1
+        ]);
     }
 
 

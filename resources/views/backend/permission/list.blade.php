@@ -18,7 +18,7 @@
                         @endif
                         <h4 class="card-title">Permission List</h4>
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered zero-configuration data-table">
+                            <table id="permissionTable" class="table table-striped table-bordered zero-configuration data-table">
                                 <thead>
                                 <tr>
                                     <th>Id</th>
@@ -58,22 +58,22 @@
 
 
             // Edit User Button
-            $('#userTable').on('click','.editUser',function(){
+            $('#permissionTable').on('click','.editUser',function(){
                 let id = $(this).data('id');
-                window.location.href = "users/"+id+"/edit";
+                window.location.href = "permissions/"+id+"/edit";
             })
 
             // Delete record
             let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-            $('#userTable').on('click','.deleteUser',function() {
+            $('#permissionTable').on('click','.deleteUser',function() {
                 let id = $(this).data('id');
 
                 var deleteConfirm = confirm("Are you sure?");
                 if (deleteConfirm === true) {
                     // AJAX request
                     $.ajax({
-                        url: "{{ route('admin.user.del') }}",
+                        url: "{{ route('admin.permission.delete') }}",
                         type: 'post',
                         data: {_token: CSRF_TOKEN, id: id},
                         success: function (response) {
