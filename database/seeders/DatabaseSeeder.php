@@ -8,14 +8,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
      */
-
 
     private $permissions = [
         'role-list',
@@ -60,17 +58,6 @@ class DatabaseSeeder extends Seeder
 
                 $role = Role::create(['name' => $role]);
             }
-        }
-
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i < 200; $i++) {
-            DB::table('blogs')->insert([
-                'title' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                'description' => $faker->paragraph($nbSentences = 2, $variableNbSentences = true),
-                'content' => $faker->text($maxNbChars = 500),
-            ]);
         }
 
     }
