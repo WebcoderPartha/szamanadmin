@@ -35,6 +35,9 @@ Route::prefix('admin')->middleware('admin')->group(function (){
 
     // Permission
     Route::get('/permission/create', [PermissionController::class, 'create'])->name('admin.permission.create');
+    Route::post('/permission/store', [PermissionController::class, 'store'])->name('admin.permission.store');
+    Route::get('/permission/list', [PermissionController::class, 'index'])->name('admin.permission.index');
+
 
 });
 

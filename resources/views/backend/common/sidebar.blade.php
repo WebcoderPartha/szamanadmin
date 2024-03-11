@@ -27,8 +27,9 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{ route('roles.create') }}">Add Role</a></li>
-                    <li><a href="{{ route('admin.permission.create') }}">Add Permission</a></li>
                     <li><a href="{{ route('roles.index') }}">All Role</a></li>
+                    <li><a href="{{ route('admin.permission.create') }}">Add Permission</a></li>
+                    <li><a href="{{ route('admin.permission.index') }}">All Permission</a></li>
                 </ul>
             </li>
         </ul>

@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title', 'User List')
+@section('title', 'Permission List')
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
@@ -16,20 +16,13 @@
                                 <h4 class="font-weight-bold">{{ $message }}</h4>
                             </div>
                         @endif
-                        <h4 class="card-title">User List</h4>
+                        <h4 class="card-title">Permission List</h4>
                         <div class="table-responsive">
-                            <table id="userTable" class="table table-striped table-bordered zero-configuration  data-table">
+                            <table class="table table-striped table-bordered zero-configuration data-table">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Gender</th>
-                                    <th>Profession</th>
-                                    <th>Nationality</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Image</th>
+                                    <th>Id</th>
+                                    <th>Permission</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -55,17 +48,10 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('users.index') }}",
+                ajax: "{{ route('admin.permission.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
-                    {data: 'gender', name: 'gender'},
-                    {data: 'profession', name: 'profession'},
-                    {data: 'nationality', name: 'nationality'},
-                    {data: 'role', name: 'role'},
-                    {data: 'status', name: 'status'},
-                    {data: 'image', name: 'image'},
                     {data: 'action', name: 'action', orderable: true, searchable: true},
                 ]
             });
