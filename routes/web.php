@@ -30,6 +30,14 @@ Route::prefix('admin')->middleware('admin')->group(function (){
     // User Delete
     Route::post('/user/del', [UserController::class, 'delete'])->name('admin.user.del');
 
+
+//    Route::get('/drop', [UserController::class, 'dropFile']);
+    Route::post('/user/drop/store', [UserController::class, 'storeMedia'])->name('admin.store.media');
+//    Route::post('/user/drop/post', [UserController::class, 'uploadStore'])->name('admin.upload.media');
+//    Route::get('/drop/edit/{id}', [UserController::class, 'editDrop'])->name('admin.drop.edit');
+//    Route::get('/drop/list', [UserController::class, 'dropIndex'])->name('admin.drop.list');
+//    Route::put('/drop/update/{id}', [UserController::class, 'updateDropZone'])->name('admin.drop.update');
+
     // Profile Routes
     Route::get('/profile',[ProfileController::class, 'profileDetails'])->name('admin.profile');
     Route::get('/profile/edit',[ProfileController::class, 'profileEdit'])->name('admin.profile.edit');

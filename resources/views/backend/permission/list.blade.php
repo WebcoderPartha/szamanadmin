@@ -7,10 +7,11 @@
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
+
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 offset-3">
                         @if ($message = Session::get('success'))
                             <div class="alert alert-success">
                                 <h4 class="font-weight-bold">{{ $message }}</h4>
@@ -31,10 +32,11 @@
                                 </tbody>
                             </table>
                         </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>

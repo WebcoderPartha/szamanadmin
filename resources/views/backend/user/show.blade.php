@@ -26,6 +26,14 @@
                                                 <img class="text-center img-circle" src="{{ asset('uploads/profile/profile.jpg') }}" width="200" alt="">
                                             @endif
                                         </div>
+                                        <div>
+                                            <h4>Documents</h4>
+                                            @if(count($user[0]->media) > 0)
+                                                @foreach($user[0]->media as $document)
+                                                    <a download href="{{ asset($document->file) }}"><img width="35" src="{{ asset('backend/images/file.jpg') }}" alt=""></a>
+                                                @endforeach
+                                            @endif
+                                        </div>
 
                                     </div>
 
@@ -80,7 +88,6 @@
                                                     @endif
                                                 </td>
                                             </tr>
-
                                         </table>
                                     </div>
                                 </div>

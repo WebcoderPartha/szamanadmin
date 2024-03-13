@@ -10,9 +10,7 @@
         </div>
     </div>
     <!-- row -->
-
     <div class="container-fluid">
-
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -28,7 +26,6 @@
                                 </div>
 
                             </div>
-
                             <div class="col-8">
                                 <h4>User Details</h4>
                                 <table class="table">
@@ -91,8 +88,5 @@
             </div>
         </div>
     </div>
-
-    -
     <!-- #/ container -->
-
 @endsection

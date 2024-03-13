@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\User;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +24,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            $data = User::select('*');
+            $data = User::with('media')->get();
             return Datatables::of($data)
                 ->addColumn('status', function($row){
                     if ($row->status == '1') {
@@ -71,6 +74,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
+
 //        return $request->all();
         $this->validate($request, [
             'name' => 'required',
@@ -104,6 +109,16 @@ class UserController extends Controller
                 'image' => $directory
             ]);
 
+            // If request document
+            if($request->input('document')){
+                foreach ($request->input('document', []) as $file) {
+                    Media::create([
+                       'user_id' => $user->id,
+                       'file' => 'uploads/documents/'.$file
+                    ]);
+                }
+            }
+
             // Assigned Role from Spatie
             $user->assignRole($request->input('roles'));
 
@@ -120,9 +135,21 @@ class UserController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
+            // If request document
+            if($request->input('document')){
+                foreach ($request->input('document', []) as $file) {
+                    Media::create([
+                        'user_id' => $user->id,
+                        'file' => 'uploads/documents/'.$file
+                    ]);
+                }
+            }
+
             // Assigned Role from Spatie
             $user->assignRole($request->input('roles'));
         }
+
+
 
         return redirect()->route('users.index')->with('success', 'User Created successfully');
 
@@ -133,7 +160,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user = User::find($user);
+        $user = User::with('media')->find($user);
         return view('backend.user.show',compact('user'));
     }
 
@@ -248,7 +275,6 @@ class UserController extends Controller
             }
 
 
-
         }else{
 
 
@@ -342,34 +368,55 @@ class UserController extends Controller
 
     }
 
-    public function dropFile(){
 
-        return view('backend.user.drop');
+
+
+    // Store File temporary Storage
+    public function storeMedia(Request $request){
+
+        $path = public_path('uploads/documents');
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        if ($request->file('file')){
+            $file = $request->file('file');
+
+//            $name = uniqid() . '_' . trim($file->getClientOriginalName());
+            $name = uniqid() . '.' .$file->getClientOriginalExtension();
+
+            $file->move($path, $name);
+        }
+
+//        $file->move(public_path('uploads/documents'), $name);
+
+        return response()->json([
+            'name'          => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
     }
 
-//    public function UploadStore(Request $request)
+
+    // Upload Dropzone file
+//    public function uploadStore(Request $request)
 //    {
-//        foreach($request->input('document', []) as $file) {
-//            //your file to be uploaded
-//            return $file;
+//
+//        $product = User::create([
+//            'name' => $request->name,
+//            'email' => 'name@gmail.com',
+//
+//        ]);
+//        foreach ($request->input('document', []) as $file) {
+////            $product->addMedia(public_path('uploads/documents/'.$file))->toMediaCollection('document');
+//            $product->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('document');
 //        }
+//        return redirect()->back();
+//
 //    }
 
-//    public function uploads(Request $request)
-//    {
-//        $path = storage_path('tmp/uploads');
-//
-////        !file_exists($path)) && mkdir($path, 0777, true);
-//
-//        $file = $request->file('file');
-//        $name = uniqid() . '_' . trim($file->getClientOriginalName());
-//        $file->move($path, $name);
-//
-//        return response()->json([
-//            'name'          => $name,
-//            'original_name' => $file->getClientOriginalName(),
-//        ]);
-//    }
+
+
+
 
 
 }
