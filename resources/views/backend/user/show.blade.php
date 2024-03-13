@@ -10,7 +10,6 @@
         </div>
     </div>
     <!-- row -->
-
     <div class="container-fluid">
 
                 <div class="card">

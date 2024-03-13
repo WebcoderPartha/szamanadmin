@@ -24,12 +24,12 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Gender</th>
                                     <th>Profession</th>
                                     <th>Nationality</th>
                                     <th>Role</th>
                                     <th>Status</th>
                                     <th>Image</th>
+                                    <th>File</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -60,12 +60,12 @@
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
-                    {data: 'gender', name: 'gender'},
                     {data: 'profession', name: 'profession'},
                     {data: 'nationality', name: 'nationality'},
                     {data: 'role', name: 'role'},
                     {data: 'status', name: 'status'},
                     {data: 'image', name: 'image'},
+                    {data: 'documents', name: 'documents'},
                     {data: 'action', name: 'action', orderable: true, searchable: true},
                 ]
             });

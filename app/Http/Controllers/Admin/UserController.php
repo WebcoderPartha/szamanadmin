@@ -36,8 +36,14 @@ class UserController extends Controller
                         $status = '<span class="badge badge-danger px-2">Inactive</span>';
                         return $status;
                     }
-                })
-                ->addColumn('action', function($row){
+                })->addColumn('documents', function($row){
+                    if (count($row->media) > 0){
+                        foreach ($row->media as $document) {
+                            return '<a download href="'.asset($document->file).'"><img width="35" src="'.asset('backend/images/file.jpg').'" alt=""></a>';
+                        }
+                    }
+
+                })->addColumn('action', function($row){
                     $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm editUser" data-id="'.$row->id.'">Edit</a> <a href="javascript:void(0)" data-id="'.$row->id.'" class="delete btn deleteUser btn-danger btn-sm">Delete</a> <a href="javascript:void(0)" class="edit btn btn-primary btn-sm userView" data-id="'.$row->id.'">View</a>';
                     return $actionBtn;
                 })->addColumn('role', function ($row){
@@ -54,9 +60,7 @@ class UserController extends Controller
                         $image =  '<img src="'.asset('uploads/profile/profile.jpg').'" width="60" alt="">';
                         return $image;
                     }
-                })
-                ->rawColumns(['status','action','image', 'role'])
-                ->make(true);
+                })->rawColumns(['status','documents', 'action','image', 'role'])->make(true);
         }
 //        $users = User::latest()->paginate(10);
         return view('backend.user.index');
@@ -149,8 +153,6 @@ class UserController extends Controller
             $user->assignRole($request->input('roles'));
         }
 
-
-
         return redirect()->route('users.index')->with('success', 'User Created successfully');
 
     }
@@ -180,9 +182,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
 
-
         $user = User::find($id);
-
 
         $this->validate($request, [
             'name' => 'required',
@@ -225,6 +225,29 @@ class UserController extends Controller
                         'image' => $directory
                     ]);
 
+                    // ========== If request document ======================
+                    if($request->input('document')){
+
+                        $fileHasExist = Media::where('user_id', $user->id)->get();
+
+                        if ($fileHasExist){
+                            foreach ($fileHasExist as $item){
+                                if (file_exists(public_path($item->file))){
+                                    unlink($item->file);
+                                    Media::where('user_id', $user->id)->delete();
+                                }
+                            }
+                        }
+
+                        foreach ($request->input('document', []) as $file) {
+                            Media::create([
+                                'user_id' => $user->id,
+                                'file' => 'uploads/documents/'.$file
+                            ]);
+                        }
+                    }
+                    // ========== If request document ======================
+
                     // Delete previous user role
                     DB::table('model_has_roles')->where('model_id',$user->id)->delete();
                     // Assigned Role from Spatie
@@ -245,6 +268,31 @@ class UserController extends Controller
                         'remarks' => $request->remarks,
                         'image' => $directory
                     ]);
+
+                    // ========== If request document ======================
+                    if($request->input('document')){
+
+                        $fileHasExist = Media::where('user_id', $user->id)->get();
+
+                        if ($fileHasExist){
+                            foreach ($fileHasExist as $item){
+                                if (file_exists(public_path($item->file))){
+                                    unlink($item->file);
+                                    Media::where('user_id', $user->id)->delete();
+                                }
+                            }
+                        }
+
+                        foreach ($request->input('document', []) as $file) {
+                            Media::create([
+                                'user_id' => $user->id,
+                                'file' => 'uploads/documents/'.$file
+                            ]);
+                        }
+                    }
+                    // ========== If request document ======================
+
+
                     // Delete previous user role
                     DB::table('model_has_roles')->where('model_id',$user->id)->delete();
 
@@ -268,6 +316,31 @@ class UserController extends Controller
                     'remarks' => $request->remarks,
                     'image' => $directory
                 ]);
+
+                // ========== If request document ======================
+                if($request->input('document')){
+
+                    $fileHasExist = Media::where('user_id', $user->id)->get();
+
+                    if ($fileHasExist){
+                        foreach ($fileHasExist as $item){
+                            if (file_exists(public_path($item->file))){
+                                unlink($item->file);
+                                Media::where('user_id', $user->id)->delete();
+                            }
+                        }
+                    }
+
+                    foreach ($request->input('document', []) as $file) {
+                        Media::create([
+                            'user_id' => $user->id,
+                            'file' => 'uploads/documents/'.$file
+                        ]);
+                    }
+                }
+                // ========== If request document ======================
+
+
                 // Delete previous user role
                 DB::table('model_has_roles')->where('model_id',$user->id)->delete();
                 $update->assignRole($request->input('roles'));
@@ -276,7 +349,6 @@ class UserController extends Controller
 
 
         }else{
-
 
             $update = User::find($id);
             $update->update([
@@ -290,13 +362,33 @@ class UserController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
+            // ========== If request document ======================
+            if($request->input('document')){
+
+                $fileHasExist = Media::where('user_id', $user->id)->get();
+
+                if ($fileHasExist){
+                    foreach ($fileHasExist as $item){
+                        if (file_exists(public_path($item->file))){
+                            unlink($item->file);
+                            Media::where('user_id', $user->id)->delete();
+                        }
+                    }
+                }
+
+                foreach ($request->input('document', []) as $file) {
+                    Media::create([
+                        'user_id' => $user->id,
+                        'file' => 'uploads/documents/'.$file
+                    ]);
+                }
+            }
+            // ========== If request document ======================
+
+
             // Delete previous user role
             DB::table('model_has_roles')->where('model_id',$user->id)->delete();
             $update->assignRole($request->input('roles'));
-
-
-//            // Assigned Role from Spatie
-//            $update->assignRole($request->input('roles'));
         }
 
 
@@ -329,6 +421,7 @@ class UserController extends Controller
                     'success' => 1
                 ]);
             }
+
 
         }else{
 

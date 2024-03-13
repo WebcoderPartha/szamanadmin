@@ -145,13 +145,13 @@
 
                                 <section>
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-3">
                                             <div class="form-group">
                                                 <h6> <label for="remarks">Remarks</label></h6>
                                                 <textarea name="remarks" class="form-control" id="" cols="30" rows="5">{{ $user->remarks }}</textarea>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group">
@@ -161,6 +161,14 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <img src="{{ asset($user->image) }}" id="imagePreview" width="100" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="document">Documents</label>
+                                                <div class="needsclick dropzone" id="document-dropzone">
+
                                                 </div>
                                             </div>
                                         </div>
@@ -228,7 +236,7 @@
         var uploadedDocumentMap = {}
         Dropzone.options.documentDropzone = {
             url: '{{ route('admin.store.media') }}',
-            maxFilesize: 2, // MB
+            maxFilesize: 10, // MB
             addRemoveLinks: true,
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
